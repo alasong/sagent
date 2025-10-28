@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "translate tool",
+  "type": "object",
+  "properties": {
+    "text": {"type": "string", "description": "text to translate"},
+    "target_lang": {"type": "string", "enum": ["en", "zh"], "description": "target language"}
+  },
+  "required": ["text", "target_lang"],
+  "additionalProperties": false
+}
+

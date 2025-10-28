@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "calc tool",
+  "type": "object",
+  "properties": {
+    "op": {
+      "type": "string",
+      "enum": ["add", "sub", "mul", "div"],
+      "description": "operation"
+    },
+    "a": {
+      "type": "number",
+      "description": "left operand"
+    },
+    "b": {
+      "type": "number",
+      "description": "right operand"
+    }
+  },
+  "required": ["op", "a", "b"],
+  "additionalProperties": false
+}

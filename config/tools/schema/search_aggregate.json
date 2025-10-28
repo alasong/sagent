@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "query": {"type": "string"},
+    "sources": {
+      "type": "array",
+      "items": {"type": "string"},
+      "default": ["duckduckgo", "local"]
+    },
+    "per_source_limit": {"type": "integer", "minimum": 1, "default": 5}
+  },
+  "required": ["query"],
+  "additionalProperties": false
+}

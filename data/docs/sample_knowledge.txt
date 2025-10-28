@@ -1,0 +1,6 @@
+【示例知识】
+智能体平台应具备：工具集成、流程编排、记忆管理、可靠性与守护、观测与审计、云化与资源分层。
+选型建议：
+- 强控制：LangGraph + 编排引擎（Temporal/Flyte/Argo）。
+- 协作场景：CrewAI/AutoGen。
+- 检索可靠性：LlamaIndex Agents。

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "summarize tool",
+  "type": "object",
+  "properties": {
+    "text": {"type": "string", "description": "text to summarize"},
+    "ratio": {"type": "number", "minimum": 0.1, "maximum": 1.0, "description": "keep ratio (0.1-1.0)"}
+  },
+  "required": ["text"],
+  "additionalProperties": false
+}
+

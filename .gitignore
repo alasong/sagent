@@ -1,0 +1,44 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.egg-info/
+.eggs/
+env/
+venv/
+.venv/
+ENV/
+
+# Packaging / build
+build/
+dist/
+downloads/
+sdist/
+var/
+*.egg
+*.zip
+
+# Test / coverage / cache
+.pytest_cache/
+.cache/
+coverage.xml
+.coverage*
+
+# Logs
+logs/
+*.log
+
+# Secrets (keep README)
+secrets/*
+!secrets/README.md
+
+# Local data (optional)
+# data/

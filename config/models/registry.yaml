@@ -1,0 +1,92 @@
+providers:
+  qwen:
+    provider: qwen
+    display_name: 通义千问（DashScope官方SDK）
+    model: qwen-turbo
+    base_url: null
+    api_key_env: DASHSCOPE_API_KEY
+    context_window: 32768
+    capabilities: ["function_call", "long_context", "multimodal"]
+    rate_limits:
+      rpm: 3000
+      tpm: 100000
+    cost:
+      input_per_1k_tokens_usd: 0.0
+      output_per_1k_tokens_usd: 0.0
+
+  baidu:
+    provider: baidu
+    display_name: 百度文心ERNIE（SDK专用）
+    model: ernie-4.0
+    base_url: null # 使用官方SDK，不走OpenAI兼容
+    api_key_env: ERNIE_API_KEY
+    context_window: 32768
+    capabilities: ["function_call", "multimodal"]
+    rate_limits:
+      rpm: 1200
+      tpm: 60000
+    cost:
+      input_per_1k_tokens_usd: 0.0
+      output_per_1k_tokens_usd: 0.0
+
+  spark:
+    provider: spark
+    display_name: 科大讯飞星火
+    model: spark-4.0
+    base_url: null
+    api_key_env: SPARK_API_KEY
+    context_window: 32768
+    capabilities: ["function_call"]
+    rate_limits:
+      rpm: 800
+      tpm: 40000
+    cost:
+      input_per_1k_tokens_usd: 0.0
+      output_per_1k_tokens_usd: 0.0
+
+  hunyuan:
+    provider: hunyuan
+    display_name: 腾讯混元
+    model: hunyuan-1.0
+    base_url: null
+    api_key_env: HUNYUAN_API_KEY
+    context_window: 32768
+    capabilities: ["function_call"]
+    rate_limits:
+      rpm: 800
+      tpm: 40000
+    cost:
+      input_per_1k_tokens_usd: 0.0
+      output_per_1k_tokens_usd: 0.0
+
+  moonshot:
+    provider: moonshot
+    display_name: Moonshot Kimi（OpenAI兼容）
+    model: moonshot-v1-8k
+    base_url: https://api.moonshot.cn/v1
+    api_key_env: MOONSHOT_API_KEY
+    context_window: 8192
+    capabilities: ["function_call", "long_context"]
+    rate_limits:
+      rpm: 600
+      tpm: 30000
+    cost:
+      input_per_1k_tokens_usd: 0.0
+      output_per_1k_tokens_usd: 0.0
+
+  siliconflow:
+    provider: siliconflow
+    display_name: SiliconFlow（OpenAI兼容）
+    model: Qwen2.5-7B-Instruct
+    base_url: https://api.siliconflow.cn/v1
+    api_key_env: SILICONFLOW_API_KEY
+    context_window: 32768
+    capabilities: ["function_call", "long_context"]
+    rate_limits:
+      rpm: 1200
+      tpm: 60000
+    cost:
+      input_per_1k_tokens_usd: 0.0
+      output_per_1k_tokens_usd: 0.0
+
+default_provider: qwen

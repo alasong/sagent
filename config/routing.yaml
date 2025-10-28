@@ -1,0 +1,172 @@
+strategy:
+  type: weighted
+  weights:
+    qwen: 0.8
+    baidu: 0.2
+fallback_chain:
+  - qwen
+  - baidu
+policies:
+  max_latency_ms: 6000
+  max_cost_usd_per_request: 0.05
+  allow_function_call: true
+task_routing:
+  by_tool:
+    calc:
+      - siliconflow
+      - moonshot
+      - qwen
+    search:
+      - qwen
+      - moonshot
+      - siliconflow
+    summarize:
+      - qwen
+      - moonshot
+      - siliconflow
+    translate:
+      - qwen
+      - moonshot
+      - siliconflow
+    web_fetch:
+      - qwen
+      - moonshot
+      - siliconflow
+    file_read:
+      - qwen
+      - moonshot
+      - siliconflow
+    web_search:
+      - qwen
+      - moonshot
+      - siliconflow
+    run_command:
+      - qwen
+      - moonshot
+      - siliconflow
+    web_scrape:
+      - qwen
+      - moonshot
+      - siliconflow
+    file_write:
+      - qwen
+      - moonshot
+      - siliconflow
+    list_dir:
+      - qwen
+      - moonshot
+      - siliconflow
+    open_app:
+      - qwen
+      - moonshot
+      - siliconflow
+    search_aggregate:
+      - qwen
+      - moonshot
+      - siliconflow
+  fallback_chain:
+    calc:
+      - siliconflow
+      - moonshot
+      - qwen
+    search:
+      - qwen
+      - moonshot
+      - siliconflow
+    summarize:
+      - qwen
+      - moonshot
+      - siliconflow
+    translate:
+      - qwen
+      - moonshot
+      - siliconflow
+    web_fetch:
+      - qwen
+      - moonshot
+      - siliconflow
+    file_read:
+      - qwen
+      - moonshot
+      - siliconflow
+    web_search:
+      - qwen
+      - moonshot
+      - siliconflow
+    run_command:
+      - qwen
+      - moonshot
+      - siliconflow
+    web_scrape:
+      - qwen
+      - moonshot
+      - siliconflow
+    file_write:
+      - qwen
+      - moonshot
+      - siliconflow
+    list_dir:
+      - qwen
+      - moonshot
+      - siliconflow
+    open_app:
+      - qwen
+      - moonshot
+      - siliconflow
+    search_aggregate:
+      - qwen
+      - moonshot
+      - siliconflow
+  policies:
+    calc:
+      required_capabilities: ["function_call"]
+      max_latency_ms: 4000
+      max_cost_usd_per_request: 0.03
+    search:
+      required_capabilities: ["long_context"]
+      max_latency_ms: 6000
+      max_cost_usd_per_request: 0.05
+    summarize:
+      required_capabilities: ["long_context"]
+      max_latency_ms: 5000
+      max_cost_usd_per_request: 0.03
+    translate:
+      required_capabilities: ["function_call"]
+      max_latency_ms: 5000
+      max_cost_usd_per_request: 0.03
+    web_fetch:
+      required_capabilities: ["long_context"]
+      max_latency_ms: 6000
+      max_cost_usd_per_request: 0.04
+    file_read:
+      required_capabilities: ["function_call"]
+      max_latency_ms: 3000
+      max_cost_usd_per_request: 0.01
+    web_search:
+      required_capabilities: ["long_context"]
+      max_latency_ms: 6000
+      max_cost_usd_per_request: 0.04
+    run_command:
+      required_capabilities: ["function_call"]
+      max_latency_ms: 3000
+      max_cost_usd_per_request: 0.01
+    web_scrape:
+      required_capabilities: ["long_context"]
+      max_latency_ms: 6000
+      max_cost_usd_per_request: 0.04
+    file_write:
+      required_capabilities: ["function_call"]
+      max_latency_ms: 3000
+      max_cost_usd_per_request: 0.01
+    list_dir:
+      required_capabilities: ["function_call"]
+      max_latency_ms: 3000
+      max_cost_usd_per_request: 0.01
+    open_app:
+      required_capabilities: ["function_call"]
+      max_latency_ms: 3000
+      max_cost_usd_per_request: 0.01
+    search_aggregate:
+      required_capabilities: ["long_context"]
+      max_latency_ms: 6000
+      max_cost_usd_per_request: 0.04

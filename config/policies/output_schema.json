@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "answer": {"type": "string"},
+    "citations": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "tool_used": {"type": ["string", "null"]},
+    "tool_result": {}
+  },
+  "required": ["answer", "citations", "tool_used", "tool_result"],
+  "additionalProperties": false
+}

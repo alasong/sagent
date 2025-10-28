@@ -1,0 +1,31 @@
+filters:
+  pii_redaction: true
+  disallowed_terms:
+    - "泄露个人隐私"
+    - "越权访问"
+approval:
+  high_risk_tools:
+    - "external_payment"
+    - "delete_resource"
+  require_human_review: true
+output:
+  require_citations: true
+tools:
+  run_command:
+    allowlist:
+      - "echo"
+      - "dir"
+    denylist: []
+    max_timeout_seconds: 10
+  web_search:
+    rate_limit_per_minute: 5
+    max_limit: 10
+  file_write:
+    allowed_base_dir: "data"
+    max_bytes: 50000
+  list_dir:
+    allowed_base_dir: "data"
+  open_app:
+    allowlist:
+      - "notepad"
+      - "calc"

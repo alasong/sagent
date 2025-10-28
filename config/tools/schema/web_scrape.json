@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "url": {"type": "string"},
+    "max_bytes": {"type": "integer", "minimum": 1, "default": 20000}
+  },
+  "required": ["url"],
+  "additionalProperties": false
+}

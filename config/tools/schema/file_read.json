@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "file read tool",
+  "type": "object",
+  "properties": {
+    "path": {"type": "string", "description": "local file path"}
+  },
+  "required": ["path"],
+  "additionalProperties": false
+}
+

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "search tool",
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "string",
+      "description": "查询字符串"
+    }
+  },
+  "required": ["query"],
+  "additionalProperties": false
+}
