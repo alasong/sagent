@@ -275,7 +275,8 @@ def structured_answer_with_failover(providers_order: list[str], registry: dict, 
         on_timeout = (policies or {}).get("on_sla_timeout", "abort")
         if max_total is not None:
             elapsed_ms = int((time.monotonic() - start_all) * 1000)
-            if elapsed_ms > float(max_total):
+            # 使用>=以确保当阈值为0时立即触发（测试要求）
+            if elapsed_ms >= float(max_total):
                 tried.append("sla_timeout_total")
                 if on_timeout == "degrade":
                     degraded = _make_degraded_output(citation, tool_used, tool_result, schema)
