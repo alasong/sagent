@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Risks",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {"type": "string"},
+      "description": {"type": "string"},
+      "likelihood": {"type": "string", "enum": ["low", "medium", "high"]},
+      "impact": {"type": "string", "enum": ["low", "medium", "high"]},
+      "mitigation": {"type": "array", "items": {"type": "string"}}
+    },
+    "required": ["id", "description", "likelihood", "impact"],
+    "additionalProperties": false
+  }
+}

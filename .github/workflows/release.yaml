@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install dependencies
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Validate configuration
+        run: python scripts/validate_config.py
+
+      - name: Run tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: pytest -q
+
+      - name: Generate progress docs
+        run: python scripts/generate_progress.py
+
+      - name: Build release package
+        run: python scripts/make_release.py
+
+      - name: Read version
+        id: ver
+        run: |
+          echo "VERSION=$(cat VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-v${{ steps.ver.outputs.VERSION }}
+          path: |
+            dist/agent-v${{ steps.ver.outputs.VERSION }}/
+            dist/agent-v${{ steps.ver.outputs.VERSION }}.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: agent-v${{ steps.ver.outputs.VERSION }}
+          draft: false
+          prerelease: false
+          files: |
+            dist/agent-v${{ steps.ver.outputs.VERSION }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

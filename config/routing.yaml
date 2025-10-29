@@ -64,56 +64,15 @@ task_routing:
       - qwen
       - moonshot
       - siliconflow
-  fallback_chain:
-    calc:
-      - siliconflow
-      - moonshot
-      - qwen
-    search:
+    docx_parse:
       - qwen
       - moonshot
       - siliconflow
-    summarize:
+    xlsx_parse:
       - qwen
       - moonshot
       - siliconflow
-    translate:
-      - qwen
-      - moonshot
-      - siliconflow
-    web_fetch:
-      - qwen
-      - moonshot
-      - siliconflow
-    file_read:
-      - qwen
-      - moonshot
-      - siliconflow
-    web_search:
-      - qwen
-      - moonshot
-      - siliconflow
-    run_command:
-      - qwen
-      - moonshot
-      - siliconflow
-    web_scrape:
-      - qwen
-      - moonshot
-      - siliconflow
-    file_write:
-      - qwen
-      - moonshot
-      - siliconflow
-    list_dir:
-      - qwen
-      - moonshot
-      - siliconflow
-    open_app:
-      - qwen
-      - moonshot
-      - siliconflow
-    search_aggregate:
+    pdf_parse:
       - qwen
       - moonshot
       - siliconflow
@@ -170,3 +129,15 @@ task_routing:
       required_capabilities: ["long_context"]
       max_latency_ms: 6000
       max_cost_usd_per_request: 0.04
+    docx_parse:
+      required_capabilities: ["long_context"]
+      max_latency_ms: 6000
+      max_cost_usd_per_request: 0.02
+    xlsx_parse:
+      required_capabilities: ["function_call"]
+      max_latency_ms: 4000
+      max_cost_usd_per_request: 0.02
+    pdf_parse:
+      required_capabilities: ["long_context"]
+      max_latency_ms: 6000
+      max_cost_usd_per_request: 0.03

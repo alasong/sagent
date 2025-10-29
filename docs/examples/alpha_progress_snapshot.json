@@ -1,0 +1,39 @@
+{
+  "status": "开发中",
+  "completion": 0.4,
+  "milestone": {
+    "name": "设计评审",
+    "planned_date": "2025-11-05",
+    "actual_date": "2025-11-04",
+    "progress": 1.0
+  },
+  "key_findings": [
+    "支付依赖第三方网关；需授权与沙箱接入",
+    "订单并发需限流；建议加入幂等键",
+    "登录需二次验证以满足安全基线"
+  ],
+  "pending_confirmations": [
+    { "item": "是否支持小程序端", "confidence": 0.62 },
+    { "item": "是否允许第三方外呼（预算影响）", "confidence": 0.68 }
+  ],
+  "risks": [
+    { "desc": "支付失败重试造成重复扣款", "impact": "高", "mitigation": "幂等校验与去重" }
+  ],
+  "dependencies": {
+    "internal": ["用户服务", "订单服务"],
+    "external": ["支付网关"]
+  },
+  "cost_and_sla": {
+    "current_cost": 12,
+    "currency": "CNY",
+    "cumulative_cost": 12,
+    "thresholds": { "single": 50, "cumulative": 1000 },
+    "routing": "成本优先",
+    "threshold_hit": false
+  },
+  "next_actions": [
+    { "action": "实现订单接口", "owner": "A", "due": "2025-11-06" },
+    { "action": "集成支付沙箱", "owner": "B", "due": "2025-11-07" },
+    { "action": "编写核心 AC 测试用例", "owner": "C", "due": "2025-11-07" }
+  ]
+}

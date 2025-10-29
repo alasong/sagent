@@ -499,6 +499,133 @@ def tool_open_app(app: str, args: list[str] | None = None):
     except Exception as e:
         return {"error": f"{e}"}
 
+
+# --- New document parsing tools ---
+def tool_docx_parse(path: str, include_tables: bool = True, max_paragraphs: int = 2000) -> dict:
+    from zipfile import ZipFile
+    from xml.etree import ElementTree as ET
+
+    out = {"path": path, "sections": [], "paragraphs": [], "tables": []}
+    try:
+        with ZipFile(path) as z:
+            xml_bytes = z.read("word/document.xml")
+        root = ET.fromstring(xml_bytes)
+        ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+
+        # Extract paragraphs and heading sections
+        for p in root.findall(".//w:p", ns):
+            texts = [t.text for t in p.findall(".//w:t", ns) if t.text]
+            txt = ("".join(texts) if texts else "").strip()
+            if txt:
+                if len(out["paragraphs"]) < max_paragraphs:
+                    out["paragraphs"].append(txt)
+                pStyle = p.find(".//w:pPr/w:pStyle", ns)
+                level = None
+                if pStyle is not None:
+                    val = pStyle.get("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val") or pStyle.get("w:val")
+                    if val and val.lower().startswith("heading"):
+                        digits = "".join([c for c in val if c.isdigit()])
+                        try:
+                            level = int(digits) if digits else 1
+                        except Exception:
+                            level = 1
+                if level:
+                    out["sections"].append({"level": level, "title": txt})
+
+        # Extract tables if requested
+        if include_tables:
+            for tbl in root.findall(".//w:tbl", ns):
+                rows = []
+                for tr in tbl.findall(".//w:tr", ns):
+                    row = []
+                    for tc in tr.findall(".//w:tc", ns):
+                        texts = [t.text for t in tc.findall(".//w:t", ns) if t.text]
+                        row.append("".join(texts).strip())
+                    if row:
+                        rows.append(row)
+                if rows:
+                    out["tables"].append({"rows": rows})
+        return out
+    except Exception as e:
+        out["error"] = f"docx parse failed: {e}"
+        return out
+
+
+def tool_xlsx_parse(path: str, sheet_index: int = 0, header: bool = True, max_rows: int = 1000) -> dict:
+    from zipfile import ZipFile
+    from xml.etree import ElementTree as ET
+
+    out = {"path": path, "sheet_index": sheet_index, "rows": [], "header": None}
+    try:
+        with ZipFile(path) as z:
+            # Shared strings optional
+            shared_strings = []
+            try:
+                ss_xml = z.read("xl/sharedStrings.xml")
+                ss_root = ET.fromstring(ss_xml)
+                ss_ns = {"s": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+                for si in ss_root.findall(".//s:si", ss_ns):
+                    parts = [t.text or "" for t in si.findall(".//s:t", ss_ns)]
+                    shared_strings.append("".join(parts))
+            except Exception:
+                shared_strings = []
+
+            sheet_path = f"xl/worksheets/sheet{sheet_index + 1}.xml"
+            sheet_xml = z.read(sheet_path)
+            ns = {"x": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+            root = ET.fromstring(sheet_xml)
+
+            for row in root.findall(".//x:row", ns):
+                values = []
+                for c in row.findall("x:c", ns):
+                    t = c.attrib.get("t")
+                    v = c.find("x:v", ns)
+                    is_el = c.find("x:is", ns)
+                    txt = ""
+                    if v is not None and v.text is not None:
+                        if t == "s":
+                            try:
+                                idx = int(v.text)
+                                txt = shared_strings[idx] if 0 <= idx < len(shared_strings) else str(v.text)
+                            except Exception:
+                                txt = str(v.text)
+                        else:
+                            txt = str(v.text)
+                    elif is_el is not None:
+                        parts = [t_el.text or "" for t_el in is_el.findall(".//x:t", ns)]
+                        txt = "".join(parts)
+                    values.append(txt)
+                if values:
+                    out["rows"].append(values)
+                    if len(out["rows"]) >= max_rows:
+                        break
+
+            if header and out["rows"]:
+                out["header"] = out["rows"][0]
+                out["rows"] = out["rows"][1:]
+        return out
+    except Exception as e:
+        out["error"] = f"xlsx parse failed: {e}"
+        return out
+
+
+def tool_pdf_parse(path: str, ocr: bool = False, max_pages: int = 20) -> dict:
+    out = {"path": path}
+    try:
+        # Preview only without heavy deps
+        with open(path, "rb") as f:
+            data = f.read(256 * 1024)
+        try:
+            out["text_preview"] = data.decode("latin-1")[:1000]
+        except Exception:
+            out["text_preview"] = None
+        out["pages"] = None
+        if ocr:
+            out["error"] = "OCR not implemented in local parser"
+        return out
+    except Exception as e:
+        out["error"] = f"pdf parse failed: {e}"
+        return out
 def tool_web_scrape(url: str, max_bytes: int = 20000):
     try:
         import httpx
@@ -860,6 +987,16 @@ TOOL_HANDLERS = {
     "file_write": lambda args, user_prompt: tool_file_write(args.get("path"), args.get("text", ""), bool(args.get("overwrite", False))),
     "list_dir": lambda args, user_prompt: tool_list_dir(args.get("path"), int(args.get("max_entries", 100))),
     "open_app": lambda args, user_prompt: tool_open_app(args.get("app"), args.get("args")),
+    # Document parsing tools
+    "docx_parse": lambda args, user_prompt: tool_docx_parse(
+        args.get("path"), bool(args.get("include_tables", True)), int(args.get("max_paragraphs", 2000))
+    ),
+    "xlsx_parse": lambda args, user_prompt: tool_xlsx_parse(
+        args.get("path"), int(args.get("sheet_index", 0)), bool(args.get("header", True)), int(args.get("max_rows", 1000))
+    ),
+    "pdf_parse": lambda args, user_prompt: tool_pdf_parse(
+        args.get("path"), bool(args.get("ocr", False)), int(args.get("max_pages", 20))
+    ),
 }
 
 # 异步工具执行映射
@@ -1044,6 +1181,41 @@ def normalize_tool_result(tool_used, tool_result):
             return {
                 "started": d.get("started") is True,
                 "app": d.get("app"),
+                "error": d.get("error"),
+            }
+        if tool_used == "docx_parse":
+            d = tool_result if isinstance(tool_result, dict) else {}
+            paragraphs = d.get("paragraphs") or []
+            sections = d.get("sections") or []
+            tables = d.get("tables") or []
+            return {
+                "path": d.get("path"),
+                "sections": sections[:10],
+                "paragraph_count": len(paragraphs),
+                "table_count": len(tables),
+                "preview": paragraphs[:5],
+                "error": d.get("error"),
+            }
+        if tool_used == "xlsx_parse":
+            d = tool_result if isinstance(tool_result, dict) else {}
+            rows = d.get("rows") or []
+            return {
+                "path": d.get("path"),
+                "sheet_index": d.get("sheet_index"),
+                "rows_count": len(rows),
+                "header": d.get("header"),
+                "preview_rows": rows[:5],
+                "error": d.get("error"),
+            }
+        if tool_used == "pdf_parse":
+            d = tool_result if isinstance(tool_result, dict) else {}
+            tp = d.get("text_preview")
+            if isinstance(tp, str):
+                tp = tp[:500]
+            return {
+                "path": d.get("path"),
+                "pages": d.get("pages"),
+                "text_preview": tp,
                 "error": d.get("error"),
             }
         return tool_result

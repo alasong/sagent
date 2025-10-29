@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Dependencies",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {"type": "string"},
+      "depends_on": {"type": "array", "items": {"type": "string"}},
+      "type": {"type": "string", "enum": ["internal", "external"]},
+      "notes": {"type": "string"}
+    },
+    "required": ["id", "depends_on"],
+    "additionalProperties": false
+  }
+}

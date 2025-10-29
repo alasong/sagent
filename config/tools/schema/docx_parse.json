@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "docx_parse",
+  "type": "object",
+  "properties": {
+    "path": { "type": "string", "description": "Absolute or relative path to .docx file" },
+    "include_tables": { "type": "boolean", "default": true, "description": "Extract tables into structured arrays" },
+    "max_paragraphs": { "type": "integer", "minimum": 1, "default": 2000, "description": "Limit paragraphs to avoid huge outputs" }
+  },
+  "required": ["path"],
+  "additionalProperties": false
+}

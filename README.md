@@ -1,6 +1,6 @@
-# SAgent 框架（v1.0.0）
+# Agent 框架（v1.0.0）
 
-一个可用于本地验证与上线的通用 SAgent 框架，具备：工具路由与故障切换、统一输出契约（OutputContract）、集中式配置加载（ConfigLoader）、守卫策略（Guardrails）、事件时间线与测试/CI 基础。
+一个可用于本地验证与上线的通用 Agent 框架，具备：工具路由与故障切换、统一输出契约（OutputContract）、集中式配置加载（ConfigLoader）、守卫策略（Guardrails）、事件时间线与测试/CI 基础。
 
 - 当前版本：`v1.0.0`（对应 `VERSION` = 1.0.0）
 - 发布说明：`docs/release_notes_v1.0.0.md`

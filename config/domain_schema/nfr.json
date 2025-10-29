@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Non-Functional Requirements",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "category": {"type": "string", "enum": ["performance", "security", "reliability", "availability", "maintainability", "usability", "compliance"]},
+      "requirement": {"type": "string"},
+      "metric": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "threshold": {"type": "number"},
+          "unit": {"type": "string"}
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
+    },
+    "required": ["category", "requirement"],
+    "additionalProperties": false
+  }
+}

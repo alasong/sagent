@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "User Stories",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {"type": "string"},
+      "as_a": {"type": "string"},
+      "i_want": {"type": "string"},
+      "so_that": {"type": "string"},
+      "acceptance_criteria": {"type": "array", "items": {"type": "string"}},
+      "priority": {"type": "string", "enum": ["P0", "P1", "P2"]},
+      "estimate_points": {"type": "integer", "minimum": 0}
+    },
+    "required": ["id", "as_a", "i_want", "so_that", "acceptance_criteria"],
+    "additionalProperties": false
+  }
+}

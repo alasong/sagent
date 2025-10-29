@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Acceptance Criteria Scenarios",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {"type": "string"},
+      "story_id": {"type": "string"},
+      "given": {"type": "string"},
+      "when": {"type": "string"},
+      "then": {"type": "string"}
+    },
+    "required": ["id", "given", "when", "then"],
+    "additionalProperties": false
+  }
+}
